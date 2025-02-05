@@ -7,3 +7,5 @@ include/
 lib/
 media/
 pyvenv.cfg
+
+Scripts/
