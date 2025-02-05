@@ -31,7 +31,7 @@ class Sort(Scene):
     self.play(Write(left), Write(right), run_time=1)
 
     # algo
-    def bubble_sort(input_list, n=None):
+    def bubble_sort(input_list, n=None, initial_anim_speed=0.5):
       if n is None:
         n = len(input_list)
 
@@ -41,11 +41,14 @@ class Sort(Scene):
 
       # recursive case
       for j in range(n-1):
+        # scale animation speed
+        anim_speed = initial_anim_speed * (n / len(input_list))
+
         # animate cursor movement
         self.play(
           left.animate.move_to(boxes[j]),
           right.animate.move_to(boxes[j+1]),
-          run_time=0.5
+          run_time=anim_speed
         )
 
         if input_list[j] > input_list[j+1]:
@@ -53,12 +56,12 @@ class Sort(Scene):
 
           # animate swapping list elements
           self.play(
-            Swap(boxes[j], boxes[j+1], run_time=0.5, path_arc=120*DEGREES),
-            Swap(left, right, run_time=0.5, path_arc=120*DEGREES)
+            Swap(boxes[j], boxes[j+1], run_time=anim_speed, path_arc=120*DEGREES),
+            Swap(left, right, run_time=anim_speed, path_arc=120*DEGREES)
           )
           boxes[j], boxes[j+1] = boxes[j+1], boxes[j]
 
-      return bubble_sort(input_list, n-1)
+      return bubble_sort(input_list, n-1, initial_anim_speed*0.9)
 
     # call sort algo
     bubble_sort(unsorted)
