@@ -30,29 +30,38 @@ class Sort(Scene):
         left = arr[:mid]
         right = arr[mid:]
 
+        # left_boxes = boxes[:mid]
+        # right_boxes = boxes[mid:]
+        # self.play(
+        #   left_boxes.animate.shift(LEFT * 0.1),
+        #   right_boxes.animate.shift(RIGHT * 0.1),
+        #   run_time=0.5
+        # )
+
         merge_sort(left)
         merge_sort(right)
 
-        i= j = k = 0
+        x = y = z = 0
+        while x < len(left) and y < len(right):
+          if left[x] < right[y]: # left is lower
+            arr[z] = left[x]
+            x += 1
+          else: # right is lower
+            arr[z] = right[y]
+            y += 1
+          z += 1
 
-        while i < len(left) and j < len(right):
-          if left[i] < right[j]:
-            arr[k] = left[i]
-            i += 1
-          else:
-            arr[k] = right[j]
-            j += 1
-          k += 1
+        # cleanup left remainder
+        while x < len(left):
+          arr[z] = left[x]
+          x += 1
+          z += 1
 
-        while i < len(left):
-          arr[k] = left[i]
-          i += 1
-          k += 1
-
-        while j < len(right):
-          arr[k] = right[j]
-          j += 1
-          k += 1
+        # cleanup right remainder
+        while y < len(right):
+          arr[z] = right[y]
+          y += 1
+          z += 1
 
       return arr
 
