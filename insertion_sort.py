@@ -1,4 +1,5 @@
 from manim import *
+import random
 
 
 class Sort(Scene):
@@ -31,10 +32,13 @@ class Sort(Scene):
     self.add(boxes_i, boxes)
     self.play(Write(boxes_i), Write(boxes), run_time=1)
 
-    # draw cursor
+    # draw cursors
     cursor = Triangle(color="#55ffff", fill_opacity=0.5).scale(0.2)
-    cursor.next_to(boxes[1], DOWN)
-    self.play(Write(cursor), run_time=1)
+    cursor.next_to(boxes_i[1], DOWN)
+    ins = Triangle(color="#ff5555", fill_opacity=0.5).scale(0.2)
+    ins.rotate(180*DEGREES)
+    ins.next_to(boxes_i[1], UP)
+    self.play(Write(cursor), Write(ins), run_time=1)
 
     # sort algo
     def insertion_sort(arr):
@@ -42,23 +46,34 @@ class Sort(Scene):
       if n <= 1:
         return arr
 
+      speed = 0.5
       for i in range(1, n):
         cur = arr[i]
-        self.play(cursor.animate.next_to(boxes[i], DOWN))
+        x = Text(str(arr[i]), color="#ffffff").scale(0.4)
+        self.play(
+          cursor.animate.next_to(boxes_i[i], DOWN),
+          ins.animate.next_to(boxes_i[i], UP),
+          run_time=0.5
+        )
 
         j = i - 1
         while j >= 0 and arr[j] > cur:
           arr[j+1] = arr[j]
-          self.play(Write(
-            boxes[j+1][1].become(boxes[j][1]),
+          y = Text(str(arr[j]), color="#ffffff").scale(0.4)
+          y.move_to(boxes[j+1].get_center())
+          self.play(
+            ins.animate.next_to(boxes_i[j+1], UP),
+            Write(boxes[j+1][1].become(y)),
             run_time=0.25
-          ))
+          )
           j -= 1
         arr[j+1] = cur
-        self.play(Write(
-          boxes[j+1][1].become(boxes[i][1]),
+        self.play(
+          ins.animate.next_to(boxes_i[j+1], UP),
           run_time=0.25
-        ))
+        )
+        x.move_to(boxes[j+1].get_center())
+        self.play(Write(boxes[j+1][1].become(x), run_time=0.25))
 
       return arr
 
@@ -69,4 +84,4 @@ class Sort(Scene):
 
 
 
-unsorted = [111, 23, 1, 15, 9, 3, 27, 19, 5, 11, 7, 21, 13, 29, 17, 25, 99]
+unsorted = [random.randint(1, 99) for _ in range(random.randint(10, 18))]
